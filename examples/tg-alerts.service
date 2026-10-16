@@ -1,0 +1,17 @@
+[Unit]
+Description=tg-alerts: servermon checks -> Telegram notifications
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# Credentials: /etc/tg-alerts.env (chmod 600, NOT in git)
+#   TG_ALERTS_TOKEN=123456:ABC...
+#   TG_ALERTS_CHAT_ID=123456789
+EnvironmentFile=/etc/tg-alerts.env
+ExecStart=/usr/local/bin/tg-alerts watch --interval 60
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

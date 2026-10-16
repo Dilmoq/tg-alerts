@@ -1,0 +1,6 @@
+line-length = 100
+
+[lint]
+select = ["E", "F", "W", "I", "B", "UP", "C4"]
+# B008: argparse/FastAPI-idioms may pass callables in defaults
+ignore = ["B008"]

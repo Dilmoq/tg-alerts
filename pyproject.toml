@@ -1,0 +1,43 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "tg-alerts"
+version = "1.0.0"
+description = "Tiny Telegram alerting service: send messages from CLI, watch check commands, notify on firing/recovery"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+authors = [{ name = "Dilmoq" }]
+keywords = ["telegram", "alerts", "bot", "monitoring", "notifications"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Communications :: Chat",
+]
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/Dilmoq/tg-alerts"
+
+[project.scripts]
+tg-alerts = "tg_alerts.cli:main"
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0,<9.0", "ruff>=0.6"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "C4"]
+ignore = ["B008"]
