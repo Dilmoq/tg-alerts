@@ -65,7 +65,9 @@ def cmd_test() -> int:
 
 
 def cmd_discover() -> int:
-    _, client = _build_client()
+    """Works with token only (that's the point: chat_id is unknown yet)."""
+    config = load(allow_missing_chat=True)
+    client = TgClient(config.token)
     try:
         updates = client.get_updates()
     except TelegramError as exc:

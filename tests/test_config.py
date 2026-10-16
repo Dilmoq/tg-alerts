@@ -53,6 +53,14 @@ class TestLoad:
         config = load(tmp_path / "ghost.toml")  # file missing
         assert config.token == "123:ENV"
 
+    def test_discover_mode_allows_missing_chat(self, tmp_path, monkeypatch):
+        # discover works with token only: chat not required yet
+        monkeypatch.setenv("TG_ALERTS_TOKEN", "555:PARTIAL")
+        monkeypatch.delenv("TG_ALERTS_CHAT_ID", raising=False)
+        assert load(tmp_path / "ghost.toml", allow_missing_chat=True).token == "555:PARTIAL"
+        with pytest.raises(ConfigError):
+            load(tmp_path / "ghost.toml")  # default mode still wants chat_id
+
     def test_invalid_token_detected(self, tmp_path, monkeypatch):
         monkeypatch.delenv("TG_ALERTS_TOKEN", raising=False)
         monkeypatch.setenv("TG_ALERTS_CHAT_ID", "1")

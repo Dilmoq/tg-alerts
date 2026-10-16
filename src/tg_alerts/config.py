@@ -31,16 +31,16 @@ class Config:
     chat_id: str
     state_path: pathlib.Path = pathlib.Path.home() / ".local" / "state" / "tg-alerts" / "state.json"
 
-    def validate(self) -> list[str]:
+    def validate(self, skip_chat: bool = False) -> list[str]:
         errors: list[str] = []
         if not self.token or ":" not in self.token:
             errors.append("token looks invalid (expected '<id>:<secret>' from BotFather)")
-        if not self.chat_id:
+        if not skip_chat and not self.chat_id:
             errors.append("chat_id is empty")
         return errors
 
 
-def load(explicit: pathlib.Path | None = None) -> Config:
+def load(explicit: pathlib.Path | None = None, allow_missing_chat: bool = False) -> Config:
     """Build a Config: TOML file first, environment variables override."""
     token = ""
     chat = ""
@@ -62,7 +62,7 @@ def load(explicit: pathlib.Path | None = None) -> Config:
     chat = os.environ.get(ENV_CHAT, chat)
 
     config = Config(token=token, chat_id=chat, state_path=state_path)
-    errors = config.validate()
+    errors = config.validate(skip_chat=allow_missing_chat)
     if errors:
         raise ConfigError("Missing credentials: " + "; ".join(errors) + "\n" + _HOWTO)
     return config
